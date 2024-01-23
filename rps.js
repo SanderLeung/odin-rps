@@ -21,19 +21,30 @@ let playRound = (playerSelection, computerSelection) => {
     return `You Lose! ${computerSelection} beats ${playerSelection}`;
 }
 
-let game = (rounds = 5) => {
-    let score = 0
-    for (let i = 0; i < rounds; i++) {
-        const playerSelection = prompt("Select ROCK, PAPER, or SCISSORS: ");
-        const computerSelection = getComputerChoice();
-        let result = playRound(playerSelection, computerSelection);
-        console.log(result);
-        if (result.includes("Win")) score += 1;
-        else if (result.includes("Win")) score -= 1;
-    }
-    if (score === 0) console.log("TIE");
-    else if (score > 0) console.log("YOU WIN!");
-    else console.log("YOU LOSE!");
-}
+let score = 0;
 
-game();
+const buttons = document.querySelectorAll('button');
+const resultDisplay = document.querySelector('.results');
+const scoreDisplay = document.querySelector('.score');
+
+scoreDisplay.textContent = `Score: ${score}`;
+
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        let result = playRound(button.textContent, getComputerChoice());
+        resultDisplay.textContent = result;
+        if (result.includes("Win")) score += 1;
+        else if (result.includes("Lose")) score -= 1;
+        scoreDisplay.textContent = `Score: ${score}`;
+        if (score >= 5) {
+            alert("YOU WIN! Play again?");
+            score = 0;
+            scoreDisplay.textContent = `Score: ${score}`;
+        }
+        else if (score <= -5) {
+            alert("YOU LOSE! Play again?");
+            score = 0;
+            scoreDisplay.textContent = `Score: ${score}`;
+        }
+    });
+});
